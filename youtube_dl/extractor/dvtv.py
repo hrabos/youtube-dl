@@ -78,12 +78,20 @@ class DVTVIE(InfoExtractor):
 
         formats = []
         for video in metadata['sources']:
-            ext = video['type'][6:]
+            label = video['label']
+
+            if (label == 'adaptive'):
+                ext = 'mp4'
+                height = '720'
+            else:
+                height = int(label.rstrip('p'))
+                ext = video['type'][6:]
+
             formats.append({
                 'url': video['file'],
                 'ext': ext,
-                'format_id': '%s-%s' % (ext, video['label']),
-                'height': int(video['label'].rstrip('p')),
+                'format_id': '%s-%s' % (ext, label),
+                'height': height,
                 'fps': 25,
             })
 
